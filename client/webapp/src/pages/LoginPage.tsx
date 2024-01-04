@@ -1,11 +1,27 @@
 import Button from '@mui/material/Button';
-import TextField from '@mui/material/TextField';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
-import { Typography } from '@mui/material';
+import { FormControl, IconButton, InputAdornment, InputLabel, OutlinedInput, Typography } from '@mui/material';
 import logo from '../../src/ks_logo.png';
+import React from 'react';
+import { Visibility, VisibilityOff } from '@mui/icons-material';
+import AccountBoxIcon from '@mui/icons-material/AccountBox';
+import { object, string } from 'yup';
 
 function LoginPage() {
+  const [showPassword, setShowPassword] = React.useState(false);
+
+  const handleClickShowPassword = () => setShowPassword((show) => !show);
+
+  const handleMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+  };
+
+  let userSchema = object({
+    usename: string().required(),
+    pass: string().nullable(),
+  });
+
   return (
     <>
       <Container component="main" maxWidth="xs">
@@ -27,29 +43,39 @@ function LoginPage() {
             // onSubmit={handleSubmit}
             noValidate
           >
-            <TextField
-              sx={{ mt: 5 }}
-              margin="normal"
-              required
-              fullWidth
-              id="text"
-              label="ユーザー名"
-              name="email"
-              autoComplete="user-name"
-              autoFocus
-              // helperText="ユーザー名が入力されていません"
-            />
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              name="password"
-              label="パスワード"
-              type="password"
-              id="password"
-              autoComplete="current-password"
-              // helperText="パスワードが入力されていません"
-            />
+            <FormControl sx={{ mt: 5 }} fullWidth variant="outlined">
+              <InputLabel htmlFor="outlined-adornment-usename">ユーザー名</InputLabel>
+              <OutlinedInput
+                id="use-name"
+                type="text"
+                endAdornment={
+                  <InputAdornment position="end">
+                    <IconButton aria-label="toggle password visibility">{<AccountBoxIcon />}</IconButton>
+                  </InputAdornment>
+                }
+                label="use-name"
+              />
+            </FormControl>
+            <FormControl sx={{ mt: 2 }} fullWidth variant="outlined">
+              <InputLabel htmlFor="outlined-adornment-password">パスワード</InputLabel>
+              <OutlinedInput
+                id="password"
+                type={showPassword ? 'text' : 'password'}
+                endAdornment={
+                  <InputAdornment position="end">
+                    <IconButton
+                      aria-label="toggle password visibility"
+                      onClick={handleClickShowPassword}
+                      onMouseDown={handleMouseDownPassword}
+                      edge="end"
+                    >
+                      {showPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>
+                }
+                label="Password"
+              />
+            </FormControl>
             <Button type="submit" fullWidth variant="contained" size="large" sx={{ mt: 1 }}>
               ログイン
             </Button>
